@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataTask.Entity
+namespace DataTask.DTO
 {
-    public class ModelUser
+    public class LoginDTO
     {
-        public Guid Id { get; set; }
-        public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string Role { get; set; }
     }
 }
