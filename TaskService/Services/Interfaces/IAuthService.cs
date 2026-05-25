@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataTask.DTO;
 
 namespace TaskService.Services.Interfaces
 {
     public interface IAuthService
     {
-        Task<ModelUser> LoginAsync(string email, string password);
-        Task RegisterAsync(ModelUser model);
+        Task<AuthResponseDTO?> LoginAsync(string email, string password);
+        Task<bool> RegisterAsync(ModelUser model);
     }
 }

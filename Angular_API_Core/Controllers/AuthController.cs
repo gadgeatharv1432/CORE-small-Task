@@ -1,5 +1,6 @@
 ﻿using DataTask.DTO;
 using DataTask.Entity;
+using DataTask.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskService.Services.Interfaces;
@@ -17,40 +18,31 @@ namespace Angular_API_Core.Controllers
             _authService = authService;
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDTO model)
+        public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
-            var user = await _authService.LoginAsync(model.Email, model.Password);
-            if (user == null)
-            {
-                return Unauthorized(new
-                {
-                    message = "Invalid Email or Password"
-                });
-            }
-            return Ok(new
-            {
-                user.Id,
-                user.UserName,
-                user.Email,
-                user.Role
-            });
+            if (!ModelState.IsValid)
+                return BadRequest(ApiResponse<object>.FailureResponse("Invalid request data."));
+
+            var result = await _authService.LoginAsync(model.Email, model.Password);
+
+            if (result == null)
+                return Unauthorized(ApiResponse<object>.FailureResponse("Invalid email or password.", 401));
+
+            return Ok(ApiResponse<AuthResponseDTO>.SuccessResponse(result, "Login successful."));
         }
+
         [HttpPost("register")]
-        public async Task<IActionResult> Register(ModelUser model)
+        public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
-            var user = new ModelUser
-            {
-                Id = Guid.NewGuid(),
-                UserName = model.UserName,
-                Email = model.Email,
-                Password = model.Password,
-                Role = model.Role
-            };
-            await _authService.RegisterAsync(user);
-            return Ok(new
-            {
-                message = "User Registered Successfully"
-            });
+            if (!ModelState.IsValid)
+                return BadRequest(ApiResponse<object>.FailureResponse("Invalid request data."));
+
+            var success = await _authService.RegisterAsync(model);
+
+            if (!success)
+                return Conflict(ApiResponse<object>.FailureResponse("Email already registered.", 409));
+
+            return Ok(ApiResponse<object>.SuccessResponse(null, "User registered successfully."));
         }
     }
 }
