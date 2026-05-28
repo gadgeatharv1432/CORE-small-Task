@@ -20,6 +20,9 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSet
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
+if (jwtSettings == null)
+    throw new InvalidOperationException("JwtSettings section is missing from appsettings.json");
+
 // ─── Authentication ──────────────────────────────────────────────
 builder.Services.AddAuthentication(options =>
 {

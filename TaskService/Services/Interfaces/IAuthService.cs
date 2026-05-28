@@ -11,6 +11,6 @@ namespace TaskService.Services.Interfaces
     public interface IAuthService
     {
         Task<AuthResponseDTO?> LoginAsync(string email, string password);
-        Task<bool> RegisterAsync(ModelUser model);
+        Task<bool> RegisterAsync(RegisterDTO model);
     }
 }

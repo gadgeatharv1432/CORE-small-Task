@@ -33,7 +33,7 @@ namespace Angular_API_Core.Controllers
 
             return Ok(ApiResponse<ModelTask>.SuccessResponse(task));
         }
-        [HttpGet("{Completed}")]
+        [HttpGet("{completed}")]
         public async Task<ActionResult<IEnumerable<ModelTask>>> GetCompletedTasks()
         {
             var task = await taskService.GetCompletedTaskAsync();
@@ -53,6 +53,13 @@ namespace Angular_API_Core.Controllers
         {
             await taskService.DeleteTaskAsync(id);
             return Ok(ApiResponse<object>.SuccessResponse(null, "Task deleted successfully."));
+        }
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ApiResponse<ModelTask>>> UpdateTask(Guid id, ModelTask taskmodel)
+        {
+            taskmodel.Id = id;
+            await taskService.UpdateTaskAsync(taskmodel);
+            return Ok(ApiResponse<ModelTask>.SuccessResponse(taskmodel, "Task updated successfully."));
         }
     }
 }

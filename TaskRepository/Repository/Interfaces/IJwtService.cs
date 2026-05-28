@@ -7,7 +7,7 @@ using DataTask.Entity;
 
 namespace TaskRepository.Repository.Interfaces
 {
-    public class IJwtService
+    public interface IJwtService
     {
         string GenerateToken(ModelUser user);
     }
