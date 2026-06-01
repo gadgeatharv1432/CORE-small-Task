@@ -11,5 +11,8 @@ namespace TaskRepository.Repository.Interfaces
     {
         Task<ModelUser>GetUserByEmailAsync(string email);
         Task AddUserAsync(ModelUser user);
+        Task<ModelUser?> GetUserByIdAsync(Guid id);
+        Task UpdateUserAsync(ModelUser user);
+
     }
 }

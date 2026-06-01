@@ -17,7 +17,7 @@ namespace TaskService.Services.Implementations
         {
             _taskRepository = taskRepository;
         }
-        public async Task<IEnumerable<ModelTask>> GetAllTasksAsyncNewUpload()
+        public async Task<IEnumerable<ModelTask>> GetAllTasksAsync()
         {
             return await _taskRepository.GetAllAsync();
         }

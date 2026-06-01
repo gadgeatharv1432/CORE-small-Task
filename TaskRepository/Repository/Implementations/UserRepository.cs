@@ -12,7 +12,7 @@ namespace TaskRepository.Repository.Implementations
 {
     public class UserRepository : IUserRepository
     {
-        public readonly AppDbContext _context;
+        private readonly AppDbContext _context;
 
         public UserRepository(AppDbContext context)
         {
@@ -26,6 +26,15 @@ namespace TaskRepository.Repository.Implementations
         public async Task AddUserAsync(ModelUser user)
         {
             await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<ModelUser?> GetUserByIdAsync(Guid id)
+        {
+            return await _context.Users.FindAsync(id);
+        }
+        public async Task UpdateUserAsync(ModelUser user)
+        {
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
     }

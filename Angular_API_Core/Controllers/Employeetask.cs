@@ -1,7 +1,6 @@
 ﻿using DataTask.Entity;
 using DataTask.Common;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskService.Services.Interfaces;
 
@@ -12,53 +11,66 @@ namespace Angular_API_Core.Controllers
     [Authorize]
     public class Employeetask : ControllerBase
     {
-        private readonly ITaskService taskService;
+        private readonly ITaskService _taskService;
 
         public Employeetask(ITaskService taskService)
         {
-            this.taskService = taskService;
+            _taskService = taskService;
         }
+
+        // GET /api/Employeetask
         [HttpGet]
-        public async Task <ActionResult<IEnumerable<ModelTask>>> GetTasksAsync()
+        public async Task<ActionResult<ApiResponse<IEnumerable<ModelTask>>>> GetTasksAsync()
         {
-            var tasks = await taskService.GetAllTasksAsyncNewUpload();
+            var tasks = await _taskService.GetAllTasksAsync();
             return Ok(ApiResponse<IEnumerable<ModelTask>>.SuccessResponse(tasks));
         }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<ModelTask>>> GetTaskByIdAsync(Guid id)
+
+        // GET /api/Employeetask/{id}
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<ApiResponse<ModelTask>>> GetTaskByIdAsync(Guid id)
         {
-            var task = await taskService.GetTaskByIdAsync(id);
-            if (task == null) 
+            var task = await _taskService.GetTaskByIdAsync(id);
+            if (task == null)
                 return NotFound(ApiResponse<ModelTask>.FailureResponse("Task not found.", 404));
 
             return Ok(ApiResponse<ModelTask>.SuccessResponse(task));
         }
-        [HttpGet("{completed}")]
-        public async Task<ActionResult<IEnumerable<ModelTask>>> GetCompletedTasks()
+
+        // GET /api/Employeetask/completed
+        [HttpGet("completed")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<ModelTask>>>> GetCompletedTasks()
         {
-            var task = await taskService.GetCompletedTaskAsync();
-            return Ok(task);
+            var tasks = await _taskService.GetCompletedTaskAsync();
+            return Ok(ApiResponse<IEnumerable<ModelTask>>.SuccessResponse(tasks));
         }
+
+        // POST /api/Employeetask
         [HttpPost]
         public async Task<ActionResult<ApiResponse<ModelTask>>> CreateTask(ModelTask taskmodel)
         {
             taskmodel.Id = Guid.NewGuid();
-            await taskService.CreateTaskAsync(taskmodel);
-            return CreatedAtAction(nameof(GetTaskByIdAsync),
+            await _taskService.CreateTaskAsync(taskmodel);
+            return CreatedAtAction(
+                nameof(GetTaskByIdAsync),
                 new { id = taskmodel.Id },
                 ApiResponse<ModelTask>.SuccessResponse(taskmodel, "Task created successfully."));
         }
-        [HttpDelete("{id}")]
+
+        // DELETE /api/Employeetask/{id}
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult<ApiResponse<object>>> DeleteTask(Guid id)
         {
-            await taskService.DeleteTaskAsync(id);
+            await _taskService.DeleteTaskAsync(id);
             return Ok(ApiResponse<object>.SuccessResponse(null, "Task deleted successfully."));
         }
-        [HttpPut("{id}")]
+
+        // PUT /api/Employeetask/{id}
+        [HttpPut("{id:guid}")]
         public async Task<ActionResult<ApiResponse<ModelTask>>> UpdateTask(Guid id, ModelTask taskmodel)
         {
             taskmodel.Id = id;
-            await taskService.UpdateTaskAsync(taskmodel);
+            await _taskService.UpdateTaskAsync(taskmodel);
             return Ok(ApiResponse<ModelTask>.SuccessResponse(taskmodel, "Task updated successfully."));
         }
     }

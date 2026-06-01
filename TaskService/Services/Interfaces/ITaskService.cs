@@ -10,7 +10,7 @@ namespace TaskService.Services.Interfaces
     public interface ITaskService
     {
         Task<ModelTask> GetTaskByIdAsync(Guid id);
-        Task<IEnumerable<ModelTask>> GetAllTasksAsyncNewUpload();
+        Task<IEnumerable<ModelTask>> GetAllTasksAsync();
         Task<IEnumerable<ModelTask>> GetCompletedTaskAsync();
         Task CreateTaskAsync(ModelTask taskmodel);
         Task UpdateTaskAsync(ModelTask taskmodel);

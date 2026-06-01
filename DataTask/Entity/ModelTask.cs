@@ -14,7 +14,7 @@ namespace DataTask.Entity
         public string TaskPriority { get; set; }
         public string TaskStatus { get; set; }
         public string Assignee { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; }
         public bool IsCompleted { get; set; }
 
     }

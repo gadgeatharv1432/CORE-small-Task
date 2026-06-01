@@ -12,5 +12,8 @@ namespace TaskService.Services.Interfaces
     {
         Task<AuthResponseDTO?> LoginAsync(string email, string password);
         Task<bool> RegisterAsync(RegisterDTO model);
+        Task<GetProfileDTO?> GetProfileAsync(Guid userId);
+        Task<bool> UpdateProfileAsync(Guid userId, UpdateProfileDTO dto);
+        Task<bool> ChangePasswordAsync(Guid userId, ChangePasswordDTO dto);
     }
 }

@@ -22,7 +22,7 @@ namespace DataTask.Context
             modelBuilder.Entity<ModelTask>().Property(t => t.TaskDescription).IsRequired().HasMaxLength(1000);
             modelBuilder.Entity<ModelTask>().Property(t => t.TaskPriority).IsRequired().HasMaxLength(500);
             modelBuilder.Entity<ModelTask>().Property(t => t.Assignee).IsRequired().HasMaxLength(500);
-            modelBuilder.Entity<ModelTask>().Property(t => t.DueDate).IsRequired();
+            modelBuilder.Entity<ModelTask>().Property(t => t.DueDate).IsRequired(false);
             modelBuilder.Entity<ModelTask>().Property(t => t.IsCompleted).IsRequired();
             modelBuilder.Entity<ModelUser>().ToTable("tblUser");
         }
